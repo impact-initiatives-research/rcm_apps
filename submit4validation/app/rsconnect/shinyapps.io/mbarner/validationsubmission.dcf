@@ -1,0 +1,12 @@
+name: validationsubmission
+title: validationsubmission
+username:
+account: mbarner
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 631401
+bundleId: 1900283
+url: https://mbarner.shinyapps.io/validationsubmission/
+when: 1551172946.21622
+asMultiple: FALSE
+asStatic: FALSE

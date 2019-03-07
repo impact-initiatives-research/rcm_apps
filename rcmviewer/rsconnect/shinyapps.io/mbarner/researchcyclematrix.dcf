@@ -1,0 +1,13 @@
+name: researchcyclematrix
+title: researchcyclematrix
+username:
+account: mbarner
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 591902
+bundleId: 1903336
+url: https://mbarner.shinyapps.io/researchcyclematrix/
+when: 1551269474.79808
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: rcm issues all.csv|rcm_functions.R|rcm_local.html|rcm_local.R|rcm_local.Rmd|sorted_issues
