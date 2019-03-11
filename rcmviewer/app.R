@@ -80,7 +80,6 @@ server <- function(input, output,session) {
 
 
   rcm_all<-rcm_download(include_archived = F,include_validated = T,after_year = "2015")
-  rcm <- rcm_all[!grepl("validated",rcm$status),]
 
   rcm_unit_subset<-function(rcm,unit){
     if(unit=="all"){return(rcm)}
@@ -90,13 +89,15 @@ server <- function(input, output,session) {
 
   subs<-subs_download()
 
-  rcm_rows_from_subs<-match(rcm_all,subs$file.id)
-  rcm$submitter_comment<-subs$comment[rcm_rows_from_subs]
-  rcm$submitter_email<-subs$email[rcm_rows_from_subs]
-  rcm$submitter_emergency<-subs$emergency[rcm_rows_from_subs]
-  rcm$in.country.deadline<-subs$in.country.deadline[rcm_rows_from_subs]
-  rcm$hq_focal_point<-hq_focal_point(rcm$rcid)
-  rcm$hq_focal_point[rcm$unit!="data"]<-NA
+  rcm_rows_from_subs<-match(rcm_all$file.id,subs$file.id)
+  rcm_all$submitter_comment<-subs$comment[rcm_rows_from_subs]
+  rcm_all$submitter_email<-subs$email[rcm_rows_from_subs]
+  rcm_all$submitter_emergency<-subs$emergency[rcm_rows_from_subs]
+  rcm_all$in.country.deadline<-subs$in.country.deadline[rcm_rows_from_subs]
+  rcm_all$hq_focal_point<-hq_focal_point(rcm_all$rcid)
+  rcm_all$hq_focal_point[rcm_all$unit!="data"]<-NA
+
+  rcm<-rcm_all[!grepl("validated",rcm_all$status),]
 
   output$data.unit.to.validate<-renderDataTable(rcm[rcm_is_data_unit_item(rcm),] %>%
     filter(.,grepl("HQ",.$status)) %>%
