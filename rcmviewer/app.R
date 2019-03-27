@@ -109,7 +109,7 @@ server <- function(input, output,session) {
            submitter_comment,
            submitter_email))
 
-  subs_ids_to_process_manually<-is.na(researchcyclematrix::subs_rcm_rows(subs,rcm)) | subs$file.id.new
+  subs_ids_to_process_manually<-is.na(researchcyclematrix::subs_rcm_rows(subs,rcm_all)) | subs$file.id.new
   subs_manual<-subs[subs_ids_to_process_manually,,drop=F]
   subs_manual<-data.frame(hq_focal_point=hq_focal_point(subs_manual$rcid),subs_manual)
   output$data.unit.to.validate.not.found.in.rcm<-renderDataTable(subs_manual)
