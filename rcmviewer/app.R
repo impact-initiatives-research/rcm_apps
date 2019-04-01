@@ -59,9 +59,9 @@ ui <- fluidPage(
             )),
    tabPanel("Data Unit to-validate",
      h2("to validate next:"),
-     dataTableOutput('data.unit.to.validate'),
+     div(dataTableOutput('data.unit.to.validate'),style="font-size:80%;"),
      h2("submissions with new ID, or id could not be found:"),
-     dataTableOutput('data.unit.to.validate.not.found.in.rcm')
+     div(dataTableOutput('data.unit.to.validate.not.found.in.rcm'),style="font-size:80%;")
    )
    ))
 
@@ -80,7 +80,7 @@ server <- function(input, output,session) {
 
 
   rcm_all<-rcm_download(include_archived = F,include_validated = T,after_year = "2015")
-  rcm <- rcm_all[!grepl("validated",rcm$status),]
+  rcm <- rcm_all[!grepl("validated",rcm_all$status),]
 
   rcm_unit_subset<-function(rcm,unit){
     if(unit=="all"){return(rcm)}
@@ -108,7 +108,7 @@ server <- function(input, output,session) {
            submitter_comment,
            submitter_email))
 
-  subs_ids_to_process_manually<-is.na(researchcyclematrix::subs_rcm_rows(subs,rcm)) | subs$file.id.new
+  subs_ids_to_process_manually<-is.na(researchcyclematrix::subs_rcm_rows(subs,rcm_all)) | subs$file.id.new
   subs_manual<-subs[subs_ids_to_process_manually,,drop=F]
   subs_manual<-data.frame(hq_focal_point=hq_focal_point(subs_manual$rcid),subs_manual)
   output$data.unit.to.validate.not.found.in.rcm<-renderDataTable(subs_manual)
