@@ -8,6 +8,10 @@ htmlnote<-function(text){
       text,
       shiny::br(),shiny::br(),style="color:orange;font-size:0.9em;")
 }
+htmllink<-function(){
+  shiny::div(HTML(paste("<br> <a href='https://drive.google.com/file/d/1IhIhBxC21xaYMThLj4W33MekCqPdEk0D/view?usp=sharing'>Link for the deletion form </a> <br>")),
+style="color:blue;font-size:0.9em;")
+}
 
 htmlwarning<-function(text){
   shiny::div(shiny::br(),
@@ -22,7 +26,7 @@ submission_done_panel<-function(...){
      HTML("<b>Almost done!</b><br><br>"),
      HTML("Next steps: <br><br>"),
      HTML("<ol>
-            <li>Send the email draft below along with the files that need to be validated to the data unit. Use the exact email header,recipients, cc and email body draft below. You can copy & paste them, or open a draft email with everything filled in for you:</li>"),
+            <li>Send the email draft below along with the files that need to be validated to the data unit and the deletion form. Use the exact email header,recipients, cc and email body draft below. You can copy & paste them, or open a draft email with everything filled in for you:</li>"),
      shiny::div(uiOutput(outputId = "submission_email_link"),"(this will open the email program installed on your computer (i.e. Microsoft Outlook), so the link will only work if you have set up outlook or similar with your email address on the computer you are working on.)"),
     HTML("<li>After completing step 1, the validation submission process is <b>complete</b>. you can then close this window, or click the link on the bottom of this page to make another submission.</li>
           </ol>"),
