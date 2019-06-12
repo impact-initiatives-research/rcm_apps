@@ -77,6 +77,7 @@ ui <- fluidPage(
       selectInput("datatype", "Type(s) of data submitted",c( "Household Interviews"= "hh","Key Informants"="ki","Qualitative Data (e.g. FGDs)"="fgd"),multiple=T),
       checkboxInput("emergency", "This is an exceptional emergency and I need this validated immediately", value = FALSE, width = "100%"),
      h3('Complete the deletion form:'),
+    htmlnote("Personally identifiable data should be kept beyond the date of the assessment only if it is absolutely necessary, as defined by the TORs validated by the HQ Research Design Unit. After the end of the assessment, the person responsible for the raw data confirms that all personally identifiable data has been deleted from all devices as specified in the TORs. To formalise this step, a deletion report confirming deletion and declaring any exceptions, is submitted to the Data Unit as a requirement for data validation"),
      htmllink(),
      checkboxInput("no_deletion","I completed the deletion form",value = FALSE,width="50%"),
      conditionalPanel(

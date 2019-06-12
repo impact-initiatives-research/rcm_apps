@@ -9,7 +9,7 @@ htmlnote<-function(text){
       shiny::br(),shiny::br(),style="color:orange;font-size:0.9em;")
 }
 htmllink<-function(){
-  shiny::div(HTML(paste("<br> <a href='https://drive.google.com/file/d/1IhIhBxC21xaYMThLj4W33MekCqPdEk0D/view?usp=sharing'>Link for the deletion form </a> <br>")),
+  shiny::div(HTML(paste("<br> <a href='https://drive.google.com/file/d/1IhIhBxC21xaYMThLj4W33MekCqPdEk0D/view?usp=sharing'>Please complete this deletion form </a> <br>")),
 style="color:blue;font-size:0.9em;")
 }
 
