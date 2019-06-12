@@ -76,12 +76,20 @@ ui <- fluidPage(
       shiny::textAreaInput("comment",label = "Comment / additional information:",value = "",width = "100%"),
       selectInput("datatype", "Type(s) of data submitted",c( "Household Interviews"= "hh","Key Informants"="ki","Qualitative Data (e.g. FGDs)"="fgd"),multiple=T),
       checkboxInput("emergency", "This is an exceptional emergency and I need this validated immediately", value = FALSE, width = "100%"),
+     h3('Complete the deletion form:'),
+     htmllink(),
+     checkboxInput("no_deletion","I completed the deletion form",value = FALSE,width="50%"),
+     conditionalPanel(
+       condition = "input.no_deletion == true",
+       htmlwarning("Please complete the form and attached it to the email for validation.") ),
       htmlnote("you may need to log into a google Account for authentification. This can be any google account."),
       shiny::uiOutput("not_complete_message"),
       shiny::actionButton(inputId = "send", label = 'submit for validation',style="background-color:#FF0000;color:#FFFFFF")
+   
    ),
    submission_done_panel(),
-   HTML((("<br><br>"))))
+   HTML((("<br><br>")))
+   )
 
 
 
