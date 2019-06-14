@@ -203,7 +203,7 @@ server <- function(input, output,session) {
       fileid<-paste("[[new item id]] ",input$newid)
     }
     
-    to="martin.barner@impact-initiatives.org;eliora.henzler@impact-initiatives.org;sharon.orengo@impact-initiatives.org"
+    to="martin.barner@impact-initiatives.org;eliora.henzler@impact-initiatives.org;sharon.orengo@impact-initiatives.org;chiara.debenedetti@impact-initiatives.org"
     cc="katya.ivanova@impact-initiatives.org;lea.barbezat@impact-initiatives.org;nayana.das@impact-initiatives.org;renaud.zambeaux@impact-initiatives.org"
     subject<-paste0(input$rcid,": ","for data unit validation - ",fileid)
     body<-(paste0(
