@@ -80,13 +80,9 @@ ui <- fluidPage(
     htmlnote("Personally identifiable data should be kept beyond the date of the assessment only if it is absolutely necessary, as defined by the TORs validated by the HQ Research Design Unit. After the end of the assessment, the person responsible for the raw data confirms that all personally identifiable data has been deleted from all devices as specified in the TORs. To formalise this step, a deletion report confirming deletion and declaring any exceptions, is submitted to the Data Unit as a requirement for data validation"),
      htmllink(),
      checkboxInput("no_deletion","I completed the deletion form",value = FALSE,width="50%"),
-     conditionalPanel(
-       condition = "input.no_deletion == true",
-       htmlwarning("Please complete the form and attached it to the email for validation.") ),
       htmlnote("you may need to log into a google Account for authentification. This can be any google account."),
       shiny::uiOutput("not_complete_message"),
       shiny::actionButton(inputId = "send", label = 'submit for validation',style="background-color:#FF0000;color:#FFFFFF")
-   
    ),
    submission_done_panel(),
    HTML((("<br><br>")))
@@ -167,12 +163,14 @@ server <- function(input, output,session) {
     complete_file.id<-(input$idnotfound & complete_file.id_new) | (!input$idnotfound & complete_file.id_existing)
     complete_email<-(grepl(
     "^.*@.*\\..*$", # regex to recognise email address
-
       input$email))
-    complete <- complete_file.id & complete_email
+    complete_deletion <- (input$no_deletion == TRUE)
+    complete <- complete_file.id & complete_email & complete_deletion
     if(!complete){
       message<-HTML(paste("ERROR:",ifelse(complete_file.id,"","A country, research cycle and item ID must be selected before submission."),
-                              ifelse(complete_email,"","A valid email address must be selected before submission."),sep="<br>"))
+                              ifelse(complete_email,"","A valid email address must be selected before submission."),
+                              ifelse(complete_deletion, "", "Please complete deletion form and attached it to the email for validation"),sep="<br>"))
+      
       output$not_complete_message<-renderUI({htmlwarning(message)})
       return(NULL)
     }else{
