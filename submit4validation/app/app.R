@@ -127,6 +127,7 @@ server <- function(input, output,session) {
 
   observeEvent(input$rcid, {
     file.id_choices<-c(unique(rcm$file.id[grepl(input$rcid,rcm$rcid)]))
+    file.id_choices <- file.id_choices[grepl("_DDR", file.id_choices)!= T]
     updateSelectInput(session, "file.id",  choices = file.id_choices,selected = "None")
     updateSelectInput(session, "round",  choices = c("select File ID first"="None"),selected = "None")
 
@@ -145,7 +146,7 @@ server <- function(input, output,session) {
         round_choices<-c("please select.."="None",round_choices)
       }
     }
-    }
+      }
     updateSelectInput(session, "round",  choices = round_choices)
   })
 
