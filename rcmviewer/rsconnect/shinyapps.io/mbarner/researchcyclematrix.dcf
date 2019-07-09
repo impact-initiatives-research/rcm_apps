@@ -1,0 +1,12 @@
+name: researchcyclematrix
+title: researchcyclematrix
+username:
+account: mbarner
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 591902
+bundleId: 2176378
+url: https://mbarner.shinyapps.io/researchcyclematrix/
+when: 1561445401.76793
+asMultiple: FALSE
+asStatic: FALSE

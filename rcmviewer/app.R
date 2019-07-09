@@ -9,7 +9,7 @@
 
 library(shiny)
 library(ggplot2)
-
+# library(researchcyclematrix)
 # Define UI for application that draws a histogram
 ui <- fluidPage(
   navbarPage(
@@ -79,7 +79,7 @@ server <- function(input, output,session) {
 
 
 
-  rcm_all<-rcm_download(include_archived = T,include_validated = T,after_year = "2015")
+  rcm_all<-rcm_download(include_archived = T,include_validated = T,after_year = "2015",gdrive_links = TRUE)
 
   
 
@@ -96,13 +96,13 @@ server <- function(input, output,session) {
   rcm_all$submitter_email<-subs$email[rcm_rows_from_subs]
   rcm_all$submitter_emergency<-subs$emergency[rcm_rows_from_subs]
   rcm_all$in.country.deadline<-subs$in.country.deadline[rcm_rows_from_subs]
-  rcm_all$hq_focal_point<-hq_focal_point(rcm_all$rcid)
+  rcm_all$hq_focal_point<-researchcyclematrix:::hq_focal_point(rcm_all$rcid)
   rcm_all$hq_focal_point[rcm_all$unit!="data"]<-NA
 
   rcm<-rcm_all[!grepl("validated",rcm_all$status),]
   rcm<- rcm_all[!grepl("validated",rcm_all$status) & !rcm_all$archived,]
 
-  output$data.unit.to.validate<-renderDataTable(rcm[rcm_is_data_unit_item(rcm),] %>%
+  output$data.unit.to.validate<-renderDataTable(rcm[researchcyclematrix:::rcm_is_data_unit_item(rcm),] %>%
     filter(.,grepl("HQ",.$status)) %>%
     arrange(date.hqsubmission.actual) %>%
     select(hq_focal_point,file.id,
@@ -112,9 +112,9 @@ server <- function(input, output,session) {
            submitter_comment,
            submitter_email))
 
-  subs_ids_to_process_manually<-is.na(researchcyclematrix::subs_rcm_rows(subs,rcm_all)) | subs$file.id.new
+  subs_ids_to_process_manually<-is.na(researchcyclematrix:::subs_rcm_rows(subs,rcm_all)) | as.logical(subs$file.id.new)
   subs_manual<-subs[subs_ids_to_process_manually,,drop=F]
-  subs_manual<-data.frame(hq_focal_point=hq_focal_point(subs_manual$rcid),subs_manual)
+  subs_manual<-data.frame(hq_focal_point=researchcyclematrix:::hq_focal_point(subs_manual$rcid),subs_manual)
   output$data.unit.to.validate.not.found.in.rcm<-renderDataTable(subs_manual)
 
   output$issuetable <- renderDataTable({rcm_check(rcm_unit_subset(rcm,input$unit))},escape = F)
@@ -127,22 +127,22 @@ server <- function(input, output,session) {
   output$longestwithhq<-renderDataTable({
 
     subs<-rcm_unit_subset(rcm,input$unit)
-    subs<-rcm_add_validation_button(subs)
-    subs<-rcm_longest_with_hq(subs,n=50,add.columns = "change.state")
+    subs<-researchcyclematrix:::rcm_add_validation_button(subs)
+    subs<-researchcyclematrix:::rcm_longest_with_hq(subs,n=50,add.columns = "change.state")
       subs
     },escape = F)
-  output$expected<-renderDataTable({rcm_submission_expected(rcm_unit_subset(rcm,input$unit))},escape = F)
+  output$expected<-renderDataTable({researchcyclematrix:::rcm_submission_expected(rcm_unit_subset(rcm,input$unit))},escape = F)
   output$passedmilestone<-renderDataTable({
-    rcm[which(rcm_passed_milestone(rcm) & !rcm$archived & !grepl("validated",rcm$status)),c("link","rcid","date.milestone","status")]
+    rcm[which(researchcyclematrix:::rcm_passed_milestone(rcm) & !rcm$archived & !grepl("validated",rcm$status)),c("link","rcid","date.milestone","status")]
       },escape=F
     )
   output$distPlot <- renderPlot({
 
      # draw the histogram with the specified number of bins
-     rcm_gant(rcm_unit_subset(rcm,input$unit))
+     researchcyclematrix:::rcm_gant(rcm_unit_subset(rcm,input$unit))
   },height = 10000)
 
-  output$timeline<-renderPlot({validation_timeline(rcm)},height = 300)
+  output$timeline<-renderPlot({researchcyclematrix:::validation_timeline(rcm_all,60,30)},height = 300)
 
 
   observeEvent(input$file_id_validated, {

@@ -1,0 +1,12 @@
+name: rcmviewer
+title: rcmviewer
+username:
+account: mbarner
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 996953
+bundleId: 2176370
+url: https://mbarner.shinyapps.io/rcmviewer/
+when: 1561444870.83676
+asMultiple: FALSE
+asStatic: FALSE

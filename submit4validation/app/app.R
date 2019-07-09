@@ -101,7 +101,7 @@ server <- function(input, output,session) {
   require("researchcyclematrix")
   rcm<-rcm_download(include_archived = F,include_validated = F,after_year = "2015",raw = F,gdrive_links = F)
   rcm<-rcm[rcm$unit=="data",]
-
+  rcm<-rcm[rcm$type!="data deletion report",]
   countrychoices<-unique(substr(rcm$rcid,1,3))
   countrychoices<-countrychoices[countrychoices!=""]
 
