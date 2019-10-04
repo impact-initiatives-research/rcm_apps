@@ -13,10 +13,7 @@
 #' using google client oauth following instructions in
 #' ?googlesheets::gs_webapp_auth_url
 #' 
-#' client id:
-#' 818037350367-q5erpj33opegco9vupgtgn2s3u5lg063.apps.googleusercontent.com
-#' 
-#' key: 8jEMPa-0vgLVsj860sCzo04Y
+
 #' 
 
 
