@@ -8,11 +8,17 @@ htmlnote<-function(text){
       text,
       shiny::br(),shiny::br(),style="color:orange;font-size:0.9em;")
 }
-htmllink<-function(){
-  shiny::div(HTML(paste("<br> <a href='https://drive.google.com/file/d/11zcwtZ-gb9kyLQCb3dbesxoUc5B-Jcvp/view?usp=sharing'>Please complete the deletion form attached to this link. </a> <br>")),
-style="color:blue;font-size:0.9em;")
+htmllink_deletionform<-function(){
+  shiny::div(HTML(paste("<br> <a href='https://drive.google.com/file/d/11zcwtZ-gb9kyLQCb3dbesxoUc5B-Jcvp/view?usp=sharing' target=\"_blank\">Please complete the deletion form attached to this link. </a> <br>")),
+style="color:red;font-size:1em;")
 }
 
+htmlwarning_bold<-function(text){
+  
+    shiny::div(shiny::br(),
+               text,
+               shiny::br(),shiny::br(),style="color:#FF0000;font-size:1em;font-weight:bold;")
+}
 htmlwarning<-function(text){
   shiny::div(shiny::br(),
       text,
@@ -33,7 +39,6 @@ submission_done_panel<-function(...){
      shiny::div("Thank you very much.
                 You filling this form helps us keep track of everything, and make sure we validate your products in time."
                 ),
-
    br(),br(),
    shiny::div(HTML(paste("<b>Email Subject (copy & paste exactly):</b>",
                   greybox(uiOutput("submission_email_subject"))))),

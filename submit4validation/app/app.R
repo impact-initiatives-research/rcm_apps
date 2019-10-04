@@ -6,6 +6,20 @@
 #
 #    http://shiny.rstudio.com/
 #
+
+#' 
+#' authentication no longer works in shiny as it does locally!!
+#' 
+#' using google client oauth following instructions in
+#' ?googlesheets::gs_webapp_auth_url
+#' 
+#' client id:
+#' 818037350367-q5erpj33opegco9vupgtgn2s3u5lg063.apps.googleusercontent.com
+#' 
+#' key: 8jEMPa-0vgLVsj860sCzo04Y
+#' 
+
+
 library(shiny)
 library(ggplot2)
 source("./components.R")
@@ -30,7 +44,9 @@ list_items_nulls_to_empty_string<-function(l,itemnames){
 }
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-
+  # title = ("OUT OF SERVICE: Unfortunately the submission form is currently not working. Please send your submission directly via email to martin.barner@impact-initiatives.org and chiara.debenedetti@impact-initiatives.org, with research@impact-initiatives.org in CC"),
+  div("OUT OF SERVICE: Unfortunately the submission form is currently not working. Please send your submission directly via email to martin.barner@impact-initiatives.org and chiara.debenedetti@impact-initiatives.org, with research@impact-initiatives.org in CC",style = "font-size:5em"),
+ # )
    # Application title
    title=("Submit for Validation"),
    #    header=mainPanel(selectInput("unit", "Unit:",
@@ -42,6 +58,9 @@ ui <- fluidPage(
    #               "other"="other"
    #              ),selected = "all"))
    # ,
+   shiny::div(shiny::br(),
+              "OUT OF SERVICE: Unfortunately the submission form is currently not working. Please send your submission directly via email to martin.barner@impact-initiatives.org and chiara.debenedetti@impact-initiatives.org, with research@impact-initiatives.org in CC",
+              shiny::br(),shiny::br(),style="color:#FFFFFF;font-size:4em;"),
    h2('Data Unit Validation Submission'),
    conditionalPanel('output.displayinput!="visible" & output.submission_success != "yes"',"Loading..."),
    conditionalPanel('output.displayinput=="visible"',
@@ -67,7 +86,7 @@ ui <- fluidPage(
    conditionalPanel(
      condition = "input.idnotfound == true",
      htmlwarning("Please make 100% sure that no existing item ID matches your submission before ticking the above.")
-     
+
      ),
       selectInput("round", "Round",c( "select file ID first"= "loading"),selected = "select file ID first",width = "100%"),
    h3('Add basic information:'),
@@ -77,10 +96,11 @@ ui <- fluidPage(
       selectInput("datatype", "Type(s) of data submitted",c( "Household Interviews"= "hh","Key Informants"="ki","Qualitative Data (e.g. FGDs)"="fgd"),multiple=T),
       checkboxInput("emergency", "This is an exceptional emergency and I need this validated immediately", value = FALSE, width = "100%"),
      h3('Complete the deletion form:'),
-    htmlnote("Personally identifiable data should be kept beyond the date of the assessment only if it is absolutely necessary, as defined by the TORs validated by the HQ Research Design Unit. After the end of the assessment, the person responsible for the raw data confirms that all personally identifiable data has been deleted from all devices as specified in the TORs. To formalise this step, a deletion report confirming deletion and declaring any exceptions, is submitted to the Data Unit as a requirement for data validation"),
-     htmllink(),
+   htmlwarning_bold("NEW:"),
+   htmlwarning("Personally identifiable data should not be kept beyond the date of the assessment unless it is absolutely necessary (as defined TORs validated by the HQ Research Design Unit.) After the end of the assessment, the person responsible for the raw data confirms that all personally identifiable data has been deleted from all devices as specified in the TORs. A deletion report confirming deletion of sensitive information as sepcified in the ToRs  and declaring any exceptions must be submitted to the Data Unit as a requirement for data validation"),
+   htmllink_deletionform(),
      checkboxInput("no_deletion","I completed the deletion form",value = FALSE,width="50%"),
-      htmlnote("you may need to log into a google Account for authentification. This can be any google account."),
+      div("you may need to log into a google Account for authentification. This can be any google account."),
       shiny::uiOutput("not_complete_message"),
       shiny::actionButton(inputId = "send", label = 'submit for validation',style="background-color:#FF0000;color:#FFFFFF")
    ),
@@ -101,6 +121,7 @@ server <- function(input, output,session) {
   library("tidyr")
   library("magrittr")
   library("httr")
+
 
   # devtools::install_github("mabafaba/researchcyclematrix")
   require("researchcyclematrix")
@@ -170,8 +191,8 @@ server <- function(input, output,session) {
     if(!complete){
       message<-HTML(paste("ERROR:",ifelse(complete_file.id,"","A country, research cycle and item ID must be selected before submission."),
                               ifelse(complete_email,"","A valid email address must be selected before submission."),
-                              ifelse(complete_deletion, "", "Please complete deletion form and attached it to the email for validation"),sep="<br>"))
-      
+                              ifelse(complete_deletion, "", "Please complete the deletion form and tick the box above to confirm you will attach it to the email for validation"),sep="<br>"))
+
       output$not_complete_message<-renderUI({htmlwarning(message)})
       return(NULL)
     }else{
@@ -180,7 +201,7 @@ server <- function(input, output,session) {
     fileid<-input$file.id
     if(length(fileid)==0){fileid<-""}
     fileid<-paste(input$file.id,collapse=" _and id_ ")
-    
+
     today<-format.Date(Sys.Date(),format="%d-%b-%y")
     today_standardised_format<-as.character(Sys.time())
     input_filled<-input
@@ -206,13 +227,13 @@ server <- function(input, output,session) {
 
     print(api_request_return)
 
-    
+
     if(input$idnotfound){
       fileid<-paste("[[new item id]] ",input$newid)
     }
-    
-    to="martin.barner@impact-initiatives.org;eliora.henzler@impact-initiatives.org;sharon.orengo@impact-initiatives.org;chiara.debenedetti@impact-initiatives.org"
-    cc="katya.ivanova@impact-initiatives.org;lea.barbezat@impact-initiatives.org;nayana.das@impact-initiatives.org;renaud.zambeaux@impact-initiatives.org"
+
+    to="chiara.debenedetti@impact-initiatives.org;martin.barner@impact-initiatives.org"
+    cc="research@impact-initiatives.org"
     subject<-paste0(input$rcid,": ","for data unit validation - ",fileid)
     body<-(paste0(
 "Dearest Data Unit,\n\nPlease find attached for validation the files relating to:\n\n",
@@ -235,7 +256,7 @@ input$comment,"\n\n\n",
     output$submission_email_body_html<-renderUI({HTML(gsub("\n","<br>",body))})
     output$submission_email_to<-renderUI({HTML(to)})
     output$submission_email_cc<-renderUI({HTML(cc)})
-    
+
     browseURL(mail_href)
 
     output$submission_success=reactive({"yes"})
