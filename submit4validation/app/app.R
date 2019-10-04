@@ -20,6 +20,9 @@ source("./components.R")
 
 
 
+googlesheets::gs_auth(token = "./shiny_app_token.rds")
+
+
 fill0length<-function(x){
 ifelse(length(x)==0,"",x)  
 }
@@ -117,8 +120,6 @@ server <- function(input, output,session) {
   library("tidyr")
   library("magrittr")
   library("httr")
-  options(httr_oob_default=TRUE) 
-  googlesheets::gs_auth(new_user = TRUE) 
 
   # devtools::install_github("mabafaba/researchcyclematrix")
   require("researchcyclematrix")
