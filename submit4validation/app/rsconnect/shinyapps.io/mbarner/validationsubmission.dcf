@@ -5,8 +5,8 @@ account: mbarner
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 631401
-bundleId: 2467772
+bundleId: 2467935
 url: https://mbarner.shinyapps.io/validationsubmission/
-when: 1570174862.0302
+when: 1570177927.10942
 asMultiple: FALSE
 asStatic: FALSE

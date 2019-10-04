@@ -8,18 +8,17 @@
 #
 
 #' 
-#' authentication no longer works in shiny as it does locally!!
+#' authentication no longer works in shiny as it does locally!
 #' 
-#' using google client oauth following instructions in
-#' ?googlesheets::gs_webapp_auth_url
-#' 
-
+#' you must include a specific .httr-auth file before deploying, and include that file in the app.
 #' 
 
 
 library(shiny)
 library(ggplot2)
 source("./components.R")
+
+
 
 fill0length<-function(x){
 ifelse(length(x)==0,"",x)  
@@ -118,7 +117,8 @@ server <- function(input, output,session) {
   library("tidyr")
   library("magrittr")
   library("httr")
-
+  options(httr_oob_default=TRUE) 
+  googlesheets::gs_auth(new_user = TRUE) 
 
   # devtools::install_github("mabafaba/researchcyclematrix")
   require("researchcyclematrix")
