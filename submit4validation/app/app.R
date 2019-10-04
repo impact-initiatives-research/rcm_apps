@@ -7,11 +7,18 @@
 #    http://shiny.rstudio.com/
 #
 
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# MUST DO BEFORE DEPLOYING THIS APP TO THE WEB ---------------------------------------
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #' 
-#' authentication no longer works in shiny as it does locally!
-#' 
-#' you must include a specific .httr-auth file before deploying, and include that file in the app.
-#' 
+#' 1. on your local computer, open google_drive_authentification.R 
+#' 2. in the following steps, best to NOT use your personal gmail account. Use a throwaway account.
+#' 3. run the two lines of code; 
+#' 4. follow the instructions; a browser window should open asking you to log into your google account, with a code to copy paste into the console etc.
+#' 5. Once it's done, there should be a new file created in "./submit4validation/app/" called "shiny_app_token.rds"
+#' 6. now you can deploy the app; make sure to include that file (keep/add the tick on that file in the popup when publishing the app)
+#' 8. Now DELETE the .rds file.
+#' 9. IMPORTANT: DO NOT PUSH THE shiny_app_token.rds FILE TO GITHUB or share it with anyone. It contains sensitive google authentification info!
 
 
 library(shiny)
@@ -43,10 +50,6 @@ list_items_nulls_to_empty_string<-function(l,itemnames){
 }
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-  # title = ("OUT OF SERVICE: Unfortunately the submission form is currently not working. Please send your submission directly via email to martin.barner@impact-initiatives.org and chiara.debenedetti@impact-initiatives.org, with research@impact-initiatives.org in CC"),
-  div("OUT OF SERVICE: Unfortunately the submission form is currently not working. Please send your submission directly via email to martin.barner@impact-initiatives.org and chiara.debenedetti@impact-initiatives.org, with research@impact-initiatives.org in CC",style = "font-size:5em"),
- # )
-   # Application title
    title=("Submit for Validation"),
    #    header=mainPanel(selectInput("unit", "Unit:",
    #             c( "all" = "all",
@@ -56,10 +59,11 @@ ui <- fluidPage(
    #               "GIS"="GIS",
    #               "other"="other"
    #              ),selected = "all"))
-   # ,
-   shiny::div(shiny::br(),
-              "OUT OF SERVICE: Unfortunately the submission form is currently not working. Please send your submission directly via email to martin.barner@impact-initiatives.org and chiara.debenedetti@impact-initiatives.org, with research@impact-initiatives.org in CC",
-              shiny::br(),shiny::br(),style="color:#FFFFFF;font-size:4em;"),
+   # 
+   
+   # shiny::div(shiny::br(),
+              # "OUT OF SERVICE: Unfortunately the submission form is currently not working. Please send your submission directly via email to martin.barner@impact-initiatives.org and chiara.debenedetti@impact-initiatives.org, with research@impact-initiatives.org in CC",
+              # shiny::br(),shiny::br(),style="color:#FFFFFF;font-size:4em;"),
    h2('Data Unit Validation Submission'),
    conditionalPanel('output.displayinput!="visible" & output.submission_success != "yes"',"Loading..."),
    conditionalPanel('output.displayinput=="visible"',

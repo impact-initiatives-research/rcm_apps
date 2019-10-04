@@ -5,9 +5,9 @@ account: mbarner
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 631401
-bundleId: 2468041
+bundleId: 2468065
 url: https://mbarner.shinyapps.io/validationsubmission/
-when: 1570180759.95015
+when: 1570181780.64539
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: .httr-oauth-SUSPENDED
+ignoredFiles: .httr-oauth|.httr-oauth-SUSPENDED
