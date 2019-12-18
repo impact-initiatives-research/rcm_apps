@@ -22,11 +22,15 @@ enter the folder of the shiny app you want to run and open `app.R` in RStudio. T
 	library(shiny)
 	runApp()
 ```
+
 This will run the app on your local computer but the app will not yet be public to anyone.
+
+If it fails due to missing packages, install them (only from remote sources such as CRAN or GitHub, not from a local source!) 
+
 
 **If your app works locally, this does not necessarily mean that it will also work when you try to publish it on a server.** Typical reasons could be:
 
-- inaccessible packages, for example if you have installed a package from a local source
+- inaccessible packages, for example if you have installed a package from a local source rather than the github repository
 - access / authentification issues (i.e. google drive which is relevant for the submit4validation app)
 
 
@@ -60,7 +64,21 @@ rconnect::deployApp()
 
 Alternatively, you can hit the blue "publish" button that appears in the top right corner of the RStudio script panel when you have an shiny `app.R` file open.
  
+## Test the remote app
+
+Especially the `submit4validation` app may run ok but not behave as it should. You should make a few different submissions and see if it works / if the submissions actually end up in the relevant google sheet. (you can open the google sheet in the browser with `researchcyclematrix::subs_browse()`)
+
+## Debugging remote shiny apps
+
+If your app works locally but fails on the server, you can see the R console log of the application as it runs/ran on the server. To do this you need to:
+
+1. [log into your shinyapps.io account](https://www.shinyapps.io/admin/#/login?redirect=%2Fdashboard) in your browser
+2. click on "Applications", find your app and open it's console log.
 
 ## Note on shinyapps.io passwords
 
 Shinyapps.io doesn't have an automated "forgot my password" system. If you don't have the password anymore you'll have to email them and wait for someone to manually give you access again.
+
+## Resources
+
+[shinyapps.io documentation](https://docs.rstudio.com/shinyapps.io/)
