@@ -24,7 +24,7 @@ in your windows shell / os x terminal, run:
 ```
 git clone https://github.com/impact-initiatives-research/rcm_apps
 ```
-This only works if you have git installed; otherwise you can use the `clone or download` button just [click this link which points directly to the `impact-initiatives-research/rcm_apps` zip download.](https://github.com/impact-initiatives-research/rcm_apps/archive/master.zip)
+This only works if you have git installed; otherwise you can [click this link which points directly to the `impact-initiatives-research/rcm_apps` zip download.](https://github.com/impact-initiatives-research/rcm_apps/archive/master.zip) (not that this will not clone the repository but just download it's contents, so you won't be able to push any changes to the repo; for that you need to use `git clone ..` as noted above)
 
 ## Test the app locally
 
