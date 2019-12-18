@@ -2,8 +2,11 @@
 # IMPACT HQ research department shiny apps for the Research Cycle Matrix
 
 This repository contains two shiny apps for the research department's management of the research cycle matrix:
-- rcmviewer: a dashboard to view the research cycle matrix
-- submit4validation: the validation submission form
+- rcmviewer: a dashboard to view the research cycle matrix ([running version](
+https://mbarner.shinyapps.io/researchcyclematrix/) at the time of this writing)
+- submit4validation: the validation submission form ([running version](https://mbarner.shinyapps.io/validationsubmission/) at the time of this writing)
+
+
 
 
 
