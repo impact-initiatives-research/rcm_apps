@@ -5,7 +5,10 @@ This repository contains two shiny apps for the research department's management
 - rcmviewer: a dashboard to view the research cycle matrix
 - submit4validation: the validation submission form
 
-# How to deploy a shiny app
+
+
+# How to deploy these shiny apps
+
 
 ## Set up Shiny and shinyapps.io access locally
 follow the first part of the [instructions for deploying shiny apps](https://shiny.rstudio.com/articles/shinyapps.html). The sections you need to complete are:
@@ -13,6 +16,15 @@ follow the first part of the [instructions for deploying shiny apps](https://shi
 - How to install rsconnect
 - Create a shinyapps.io account
 - Configure rsconnect
+
+## Clone the rcm_apps repository
+
+in your windows shell / os x terminal, run: 
+
+```
+git clone https://github.com/mabafaba/rcm_apps
+```
+
 
 ## Test the app locally
 
