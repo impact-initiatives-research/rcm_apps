@@ -65,6 +65,7 @@ saveRDS(shiny_token, "./submit4validation/app/shiny_app_token.rds")
 6. now you can deploy the app; make sure to include the "shiny_app_token.rds" file (keep/add the tick on that file in the popup when publishing the app). Either by following the instructions in the next step or by hitting the blue "publish" button in the top right corner of the RStudio script panel when the app is open.
 8. **Now DELETE the .rds file. DO NOT PUSH THE shiny_app_token.rds FILE TO GITHUB or share it with anyone. It contains sensitive google authentification info!**
 
+(these instructions are also included in the app itself in `/submit4validation/app/google_drive_authentification.R`)
 
 ## Publishing apps to shinyapps.io
 
