@@ -50,8 +50,7 @@ If it fails due to missing packages, install them (only from remote sources such
 
 This part only needs to be done for the submit4validation app, or other apps that need to edit sheets on google drive.
 
-For the app to work _from the server_, you need to upload a token that allows the this app to access your google sheet
-this file can be created as follows:
+For the app to work _from the server_, you need to upload a token that allows  this app to access your google sheet. This file can be created as follows:
 
 1. make sure your working directory is the rcm_apps repository root folder (you an check this is the case with `getwd()`)
 2. in the following steps, best to NOT use your personal gmail account. Use a throwaway account!
