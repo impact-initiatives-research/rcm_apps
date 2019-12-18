@@ -22,9 +22,9 @@ follow the first part of the [instructions for deploying shiny apps](https://shi
 in your windows shell / os x terminal, run: 
 
 ```
-git clone https://github.com/mabafaba/rcm_apps
+git clone https://github.com/impact-initiatives-research/rcm_apps
 ```
-This only works if you have git installed; otherwise you can use the `clone or download` button just [click this link which points directly to the `mabafaba/rcm_apps` zip download.](https://github.com/mabafaba/rcm_apps/archive/master.zip)
+This only works if you have git installed; otherwise you can use the `clone or download` button just [click this link which points directly to the `impact-initiatives-research/rcm_apps` zip download.](https://github.com/impact-initiatives-research/rcm_apps/archive/master.zip)
 
 ## Test the app locally
 
