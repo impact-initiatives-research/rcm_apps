@@ -26,9 +26,10 @@ library(ggplot2)
 source("./components.R")
 
 
-
-googlesheets::gs_auth(token = "./shiny_app_token.rds")
-
+googlesheets4::gs4_deauth()
+#googlesheets4::gs4_auth(email = "debenedettic675@gmail.com", use_oob = TRUE, token = readRDS("./shiny_app_token.rds"))
+#googlesheets4::gs4_auth(token = "./shiny_app_token.rds")
+  
 
 fill0length<-function(x){
 ifelse(length(x)==0,"",x)  
@@ -64,7 +65,7 @@ ui <- fluidPage(
    # shiny::div(shiny::br(),
               # "OUT OF SERVICE: Unfortunately the submission form is currently not working. Please send your submission directly via email to martin.barner@impact-initiatives.org and chiara.debenedetti@impact-initiatives.org, with research@impact-initiatives.org in CC",
               # shiny::br(),shiny::br(),style="color:#FFFFFF;font-size:4em;"),
-   h2('Data Unit Validation Submission'),
+   h2('Data and Analysis Validation Submission'),
    conditionalPanel('output.displayinput!="visible" & output.submission_success != "yes"',"Loading..."),
    conditionalPanel('output.displayinput=="visible"',
    shiny::textInput("email",label = "your email:",value = "",width="100%"),
@@ -72,7 +73,7 @@ ui <- fluidPage(
    htmlwarning("Please use the form below to select the item you want to submit from the list of items that are expected based on submitted ToRs."),
       selectInput("country", "Country", c( "loading..."= "loading"),selected = "loading...",width = "100%"),
       selectInput("rcid", "research cycle",c( "select country first"= "loading"),selected = "select country first",width = "100%"),
-      htmlnote("The 'item ID' is a unique identifier that allows us to match this submission with the correct item in our tracking system. Each expected item has a preassigned ID (there may be only one for your research cycle/round)"),
+      htmlnote("The 'item ID' is a unique identifier that allows us to match this submission with the correct item in our tracking system. Each expected item has a preassigned ID, please get in touch if you are not sure!"),
       conditionalPanel(condition="input.idnotfound== false",
                        selectInput("file.id",
                                    "item ID",
@@ -82,30 +83,32 @@ ui <- fluidPage(
    conditionalPanel(
      condition = "input.idnotfound == true",
      shiny::textInput("newid",
-                      "give a new name to your item. It should be of the format [research cycle id]_[research cycle name]_[round/month]_[data and/or analysis]_[filenumber]",
+                      "Give a new name to your item, if not present in our list. Please use the format [research cycle id]_[research cycle name]_[round/month]_[data and/or analysis]_[filenumber]",
                       width="50%")
    ) ,
    checkboxInput("idnotfound","I can not find an item ID matching my submission",value = FALSE,width="50%"),
    conditionalPanel(
      condition = "input.idnotfound == true",
-     htmlwarning("Please make 100% sure that no existing item ID matches your submission before ticking the above.")
+     htmlwarning("Please make sure that no existing item ID matches your submission before ticking the above.")
 
      ),
       selectInput("round", "Round",c( "select file ID first"= "loading"),selected = "select file ID first",width = "100%"),
    h3('Add basic information:'),
-   shiny::dateInput("deadline",label = "external deadline for this validation:",min = Sys.Date()+3),
-      checkboxInput("complete", "with this submission, we have submitted all data/analysis for this research cycle (for this round)", value = FALSE, width = "100%"),
+      shiny::dateInput("deadline",label = "Validation deadline:",min = Sys.Date()+3),
+      checkboxInput("emergency", "This is a hard deadline", value = FALSE, width = "100%"),
+      checkboxInput("complete", "With this submission, we have submitted all data/analysis for this research cycle (for this round)", value = FALSE, width = "100%"),
       shiny::textAreaInput("comment",label = "Comment / additional information:",value = "",width = "100%"),
-      selectInput("datatype", "Type(s) of data submitted",c( "Household Interviews"= "hh","Key Informants"="ki","Qualitative Data (e.g. FGDs)"="fgd"),multiple=T),
-      checkboxInput("emergency", "This is an exceptional emergency and I need this validated immediately", value = FALSE, width = "100%"),
-     h3('Complete the deletion form:'),
-   htmlwarning_bold("NEW:"),
-   htmlwarning("Personally identifiable data should not be kept beyond the date of the assessment unless it is absolutely necessary (as defined TORs validated by the HQ Research Design Unit.) After the end of the assessment, the person responsible for the raw data confirms that all personally identifiable data has been deleted from all devices as specified in the TORs. A deletion report confirming deletion of sensitive information as sepcified in the ToRs  and declaring any exceptions must be submitted to the Data Unit as a requirement for data validation"),
-   htmllink_deletionform(),
-     checkboxInput("no_deletion","I completed the deletion form",value = FALSE,width="50%"),
-      div("you may need to log into a google Account for authentification. This can be any google account."),
+      selectInput("datatype", "Type(s) of data submitted",c( "Household Interviews"= "hh","Key Informants"="ki","Qualitative Data (e.g. FGDs)"="fgd", "Analysis"="ana"),multiple=T),
+     h3('For dataset submissions, double check fulfilment of the standard checklist:'),
+##   htmlwarning_bold("NEW:"),
+##   htmlwarning("Personally identifiable data should not be kept beyond the date of the assessment unless it is absolutely necessary (as defined TORs validated by the HQ Research Design Unit.) After the end of the assessment, the person responsible for the raw data confirms that all personally identifiable data has been deleted from all devices as specified in the TORs. A deletion report confirming deletion of sensitive information as sepcified in the ToRs  and declaring any exceptions must be submitted to the Data Unit as a requirement for data validation"),
+##Chiara: change this to point to the standard checklist!
+   ##   htmllink_deletionform(),
+      htmllink_st_checklist(),
+      checkboxInput("no_deletion","I am attaching all the relevant documents for data validation, as per the Standard Checklist.",value = FALSE,width="50%"),
       shiny::uiOutput("not_complete_message"),
-      shiny::actionButton(inputId = "send", label = 'submit for validation',style="background-color:#FF0000;color:#FFFFFF")
+      shiny::actionButton(inputId = "send", label = 'submit for validation',style="background-color:#FF0000;color:#FFFFFF"),
+      div("Note: you may need to log into a google Account for authentication. You can use any google account.")
    ),
    submission_done_panel(),
    HTML((("<br><br>")))
@@ -126,6 +129,8 @@ server <- function(input, output,session) {
   library("httr")
 
   # devtools::install_github("mabafaba/researchcyclematrix")
+##  Sys.setenv(R_REMOTES_NO_ERRORS_FROM_WARNINGS="true")
+##  remotes::install_github("chiaradeb/researchcyclematrix", ref = "dev_branch_googlesheet4", build_opts = c())
   require("researchcyclematrix")
   rcm<-rcm_download(include_archived = F,include_validated = F,after_year = "2015",raw = F,gdrive_links = F)
   rcm<-rcm[rcm$unit=="data",]
@@ -193,7 +198,7 @@ server <- function(input, output,session) {
     if(!complete){
       message<-HTML(paste("ERROR:",ifelse(complete_file.id,"","A country, research cycle and item ID must be selected before submission."),
                               ifelse(complete_email,"","A valid email address must be selected before submission."),
-                              ifelse(complete_deletion, "", "Please complete the deletion form and tick the box above to confirm you will attach it to the email for validation"),sep="<br>"))
+                              ifelse(complete_deletion, "", "Please make sure you have all the standard checklist items ready, and tick the box above to confirm you will attach it to the validation email"),sep="<br>"))
 
       output$not_complete_message<-renderUI({htmlwarning(message)})
       return(NULL)
@@ -234,11 +239,12 @@ server <- function(input, output,session) {
       fileid<-paste("[[new item id]] ",input$newid)
     }
 
-    to="chiara.debenedetti@impact-initiatives.org;martin.barner@impact-initiatives.org"
+##    to="chiara.debenedetti@impact-initiatives.org;martin.barner@impact-initiatives.org"
+    to="chiara.debenedetti@impact-initiatives.org;nayana.das@impact-initiatives.org;oleksandra.abrosimova@impact-initiatives.org;louna.lonqueur@impact-initiatives.org;megan.henery@impact-initiatives.org"
     cc="research@impact-initiatives.org"
-    subject<-paste0(input$rcid,": ","for data unit validation - ",fileid)
+    subject<-paste0(input$rcid,": ","for RDD unit validation - ",fileid)
     body<-(paste0(
-"Dearest Data Unit,\n\nPlease find attached for validation the files relating to:\n\n",
+"Dear RDD Unit,\n\nPlease find attached for validation the files relating to:\n\n",
 input$rcid,"\n",
 fileid,"\n\n",
 "We would ideally like this to be validated before ",input$deadline,"\n\n\n",
@@ -259,7 +265,7 @@ input$comment,"\n\n\n",
     output$submission_email_to<-renderUI({HTML(to)})
     output$submission_email_cc<-renderUI({HTML(cc)})
 
-    browseURL(mail_href)
+    #browseURL(mail_href)
 
     output$submission_success=reactive({"yes"})
     output$displayinput=reactive({"hidden"})

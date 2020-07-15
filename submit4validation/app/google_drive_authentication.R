@@ -13,5 +13,5 @@
 
 
 
-shiny_token <- gs_auth() # authenticate w/ your desired Google identity here
+shiny_token <- gs4_auth() # authenticate w/ your desired Google identity here
 saveRDS(shiny_token, "./submit4validation/app/shiny_app_token.rds")

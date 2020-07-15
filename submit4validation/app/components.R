@@ -13,6 +13,14 @@ htmllink_deletionform<-function(){
 style="color:red;font-size:1em;")
 }
 
+##Chiara:: added function to link to the standard checklist
+htmllink_st_checklist <- function(){
+
+  shiny::div(HTML(paste("<br> <a href='https://www.impact-repository.org/wp-content/uploads/2020/01/IMPACT_Memo_Data-Cleaning-Min-Standards-Checklist_28012020-1.pdf' target=\"_blank\">Please make sure you have all the items needed to proceed for validation. Please check with Sec 2 of the standard checkist attached to this link! </a> <br>")),
+             HTML(paste("<br> <a href='https://www.impact-repository.org/wp-content/uploads/2020/02/IMPACT_Memo_Data-Cleaning-Min-Standards-Checklist_07022020_FR.pdf' target=\"_blank\">French version available at this link. </a> <br>")),
+             style="color:red;font-size:1em;")
+}
+
 htmlwarning_bold<-function(text){
   
     shiny::div(shiny::br(),
