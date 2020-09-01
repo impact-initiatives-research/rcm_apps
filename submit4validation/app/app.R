@@ -28,7 +28,7 @@ source("./components.R")
 
 googlesheets4::gs4_deauth()
 #googlesheets4::gs4_auth(email = "debenedettic675@gmail.com", use_oob = TRUE, token = readRDS("./shiny_app_token.rds"))
-#googlesheets4::gs4_auth(token = "./shiny_app_token.rds")
+# googlesheets 4::gs4_auth(token = "./shiny_app_token.rds")
   
 
 fill0length<-function(x){
@@ -105,7 +105,18 @@ ui <- fluidPage(
 ##Chiara: change this to point to the standard checklist!
    ##   htmllink_deletionform(),
       htmllink_st_checklist(),
+      checkboxInput("raw_dataset","Raw dataset",value = FALSE,width="50%"),
+      checkboxInput("clean_dataset","Clean dataset",value = FALSE,width="50%"),
+      checkboxInput("cleaning_log","Cleaning log",value = FALSE,width="50%"),
+      checkboxInput("deletion_log","Deletion log",value = FALSE,width="50%"),
+      checkboxInput("data_deletion_report","Data Deletion Report",value = FALSE,width="50%"),
+      checkboxInput("sampling","Sampling verification output",value = FALSE,width="50%"),
+      checkboxInput("analysis_files","Analysis files",value = FALSE,width="50%"),
+      checkboxInput("analysis_outputs","Analysis outputs",value = FALSE,width="50%"),
+      checkboxInput("transcripts","[For qualitative data] A few examples of the raw transcripts and/ or debrief forms used to process and analyse
+qualitative data",value = FALSE,width="50%"),
       checkboxInput("no_deletion","I am attaching all the relevant documents for data validation, as per the Standard Checklist.",value = FALSE,width="50%"),
+
       shiny::uiOutput("not_complete_message"),
       shiny::actionButton(inputId = "send", label = 'submit for validation',style="background-color:#FF0000;color:#FFFFFF"),
       div("Note: you may need to log into a google Account for authentication. You can use any google account.")
@@ -127,11 +138,7 @@ server <- function(input, output,session) {
   library("tidyr")
   library("magrittr")
   library("httr")
-
-  # devtools::install_github("mabafaba/researchcyclematrix")
-##  Sys.setenv(R_REMOTES_NO_ERRORS_FROM_WARNINGS="true")
-##  remotes::install_github("chiaradeb/researchcyclematrix", ref = "dev_branch_googlesheet4", build_opts = c())
-  require("researchcyclematrix")
+  library("researchcyclematrix")
   rcm<-rcm_download(include_archived = F,include_validated = F,after_year = "2015",raw = F,gdrive_links = F)
   rcm<-rcm[rcm$unit=="data",]
   rcm<-rcm[rcm$type!="data deletion report",]
@@ -214,41 +221,55 @@ server <- function(input, output,session) {
     input_filled<-input
     input_filled<-list_items_nulls_to_empty_string(input_filled,
                                                    c("country","rcid","idnotfound","fileid","newid","round","email","comment","deadline","complete","datatype","emergency"))
-    api_request_return <- researchcyclematrix:::g_sheets_append_row(c(
-          fill0length(today_standardised_format),
-          fill0length(today),
-          fill0length(input_filled$country),
-          fill0length(input_filled$rcid),
-          fill0length(input_filled$idnotfound),
-          fill0length(fileid),
-          fill0length(input_filled$newid),
-          fill0length(input_filled$round),
-          fill0length(input_filled$email),
-          fill0length(input_filled$comment),
-          fill0length( format.Date(input_filled$deadline,format="%d-%b-%y")),
-          fill0length(input_filled$complete),
-          fill0length( paste(input_filled$datatype,collapse=" & ")),
-          fill0length(input_filled$emergency)
-                                                )
-                                                )
-
-    print(api_request_return)
+###Yann
+###removing this as we are not using that sheet anymore. just keeping in the records in case we need to revert.    
+    # api_request_return <- researchcyclematrix:::g_sheets_append_row(c(
+    #       fill0length(today_standardised_format),
+    #       fill0length(today),
+    #       fill0length(input_filled$country),
+    #       fill0length(input_filled$rcid),
+    #       fill0length(input_filled$idnotfound),
+    #       fill0length(fileid),
+    #       fill0length(input_filled$newid),
+    #       fill0length(input_filled$round),
+    #       fill0length(input_filled$email),
+    #       fill0length(input_filled$comment),
+    #       fill0length( format.Date(input_filled$deadline,format="%d-%b-%y")),
+    #       fill0length(input_filled$complete),
+    #       fill0length( paste(input_filled$datatype,collapse=" & ")),
+    #       fill0length(input_filled$emergency)
+    #                                             )
+    #                                             )
+    # 
+    # print(api_request_return)
 
 
     if(input$idnotfound){
       fileid<-paste("[[new item id]] ",input$newid)
     }
 
-##    to="chiara.debenedetti@impact-initiatives.org;martin.barner@impact-initiatives.org"
-    to="chiara.debenedetti@impact-initiatives.org;nayana.das@impact-initiatives.org;oleksandra.abrosimova@impact-initiatives.org;louna.lonqueur@impact-initiatives.org;megan.henery@impact-initiatives.org"
+    to="nayana.das@impact-initiatives.org;oleksandra.abrosimova@impact-initiatives.org;yann.say@impact-initiatives.org;
+    louna.lonqueur@impact-initiatives.org;megan.henery@impact-initiatives.org, gianluca.blaco@impact-initiatives.org"
     cc="research@impact-initiatives.org"
     subject<-paste0(input$rcid,": ","for RDD unit validation - ",fileid)
     body<-(paste0(
-"Dear RDD Unit,\n\nPlease find attached for validation the files relating to:\n\n",
+"Dear stellar RDD Unit,\n\nPlease find attached for validation the files relating to:\n\n",
 input$rcid,"\n",
 fileid,"\n\n",
 "We would ideally like this to be validated before ",input$deadline,"\n\n\n",
-"further comments on the files:\n\n",
+"We are sharing with you the following:","\n",
+ifelse(input$raw_dataset == TRUE, "- Raw dataset\n", ""),
+ifelse(input$clean_dataset == TRUE, "- Clean dataset\n", ""),
+ifelse(input$cleaning_log == TRUE, "- Cleaning log\n", ""),
+ifelse(input$deletion_log == TRUE, "- Deletion log\n", ""),
+ifelse(input$data_deletion_report == TRUE, "- Data Deletion Report\n", ""),
+ifelse(input$sampling == TRUE, "- Sampling verification output\n", ""),
+ifelse(input$analysis_files == TRUE, "- Analysis files\n", ""),
+ifelse(input$analysis_outputs == TRUE, "- Analysis outputs\n", ""),
+ifelse(input$transcripts == TRUE, "- A few examples of the raw transcripts and/ or debrief forms\n", ""),
+
+"\n\n\n",
+"Further comments on the files:\n\n",
 
 input$comment,"\n\n\n",
 

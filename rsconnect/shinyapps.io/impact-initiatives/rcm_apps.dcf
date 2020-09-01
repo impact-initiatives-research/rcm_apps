@@ -1,0 +1,10 @@
+name: rcm_apps
+title:
+username:
+account: impact-initiatives
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2700379
+bundleId: 3579124
+url: https://impact-initiatives.shinyapps.io/rcm_apps/
+when: 1598949406.88353

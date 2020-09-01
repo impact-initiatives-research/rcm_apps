@@ -74,7 +74,7 @@ saveRDS(shiny_token, "./submit4validation/app/shiny_app_token.rds")
 If you have followed the first parts of the [instructions for deploying shiny apps](https://shiny.rstudio.com/articles/shinyapps.html) as noted above, you should be able to publish the app directly by opening `app.R` in RStudio, then running:
 
 ```
-rconnect::deployApp()
+rsconnect::deployApp()
 ```
 
 Alternatively, you can hit the blue "publish" button that appears in the top right corner of the RStudio script panel when you have an shiny `app.R` file open.
