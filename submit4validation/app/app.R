@@ -27,7 +27,7 @@ source("./components.R")
 
 
 googlesheets4::gs4_deauth()
-#googlesheets4::gs4_auth(email = "debenedettic675@gmail.com", use_oob = TRUE, token = readRDS("./shiny_app_token.rds"))
+#googlesheets4::gs4_auth(email = "debened...5@gmail.com", use_oob = TRUE, token = readRDS("./shiny_app_token.rds"))
 # googlesheets 4::gs4_auth(token = "./shiny_app_token.rds")
   
 
@@ -248,9 +248,9 @@ server <- function(input, output,session) {
       fileid<-paste("[[new item id]] ",input$newid)
     }
 
-    to="nayana.das@impact-initiatives.org;oleksandra.abrosimova@impact-initiatives.org;yann.say@impact-initiatives.org;
-    louna.lonqueur@impact-initiatives.org;megan.henery@impact-initiatives.org, gianluca.blaco@impact-initiatives.org"
-    cc="research@impact-initiatives.org"
+    to="megan.henery@impact-initiatives.org; oleksandra.abrosimova@impact-initiatives.org;
+    louna.lonqueur@impact-initiatives.org; yann.say@impact-initiatives.org; gianluca.blaco@impact-initiatives.org"
+    cc="research@impact-initiatives.org; nayana.das@impact-initiatives.org"
     subject<-paste0(input$rcid,": ","for RDD unit validation - ",fileid)
     body<-(paste0(
 "Dear stellar RDD Unit,\n\nPlease find attached for validation the files relating to:\n\n",
